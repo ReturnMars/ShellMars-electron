@@ -1,7 +1,11 @@
 <script setup lang="ts">
 import Versions from './components/Versions.vue'
 
-const ipcHandle = (): void => window.electron.ipcRenderer.send('ping')
+const ipcHandle = (): void => {
+  // 优化后：更简洁的调用方式
+  // window.ipcHandlers.send(window.ipcEvents.TEST.PING)
+  window.electron.ipcRenderer.send(window.ipcEvents.TEST.PING, 'abc')
+}
 </script>
 
 <template>

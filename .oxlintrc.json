@@ -4,12 +4,49 @@
   "categories": {
     "correctness": "error",
     "suspicious": "warn",
-    "style": "warn"
+    "style": "off",
+    "perf": "off",
+    "pedantic": "off",
+    "restriction": "off"
   },
   "plugins": ["typescript", "vue"],
   "rules": {
     "vue/require-default-prop": "off",
-    "vue/multi-word-component-names": "off"
+    "vue/multi-word-component-names": "off",
+    "import/namespace": "off",
+    "import/order": "off",
+    "unicorn/no-array-callback-reference": "off",
+    "unicorn/no-array-method-this-argument": "off",
+    "unicorn/no-array-push-push": "off",
+    "unicorn/no-array-reduce": "off",
+    "unicorn/no-for-loop": "off",
+    "unicorn/no-lonely-if": "off",
+    "unicorn/no-nested-ternary": "off",
+    "unicorn/no-null": "off",
+    "unicorn/no-useless-undefined": "off",
+    "unicorn/prefer-array-find": "off",
+    "unicorn/prefer-array-some": "off",
+    "unicorn/prefer-includes": "off",
+    "unicorn/prefer-module": "off",
+    "unicorn/prefer-node-protocol": "off",
+    "unicorn/prefer-number-properties": "off",
+    "unicorn/prefer-optional-catch-binding": "off",
+    "unicorn/prefer-prototype-methods": "off",
+    "unicorn/prefer-string-starts-ends-with": "off",
+    "unicorn/prefer-string-trim-start-end": "off",
+    "unicorn/prefer-top-level-await": "off",
+    "unicorn/require-array-join-separator": "off",
+    "unicorn/require-number-to-fixed-digits-argument": "off",
+    "unicorn/switch-case-braces": "off",
+    "no-magic-numbers": "off",
+    "no-ternary": "off",
+    "no-underscore-dangle": "off",
+    "prefer-arrow-callback": "off",
+    "prefer-const": "off",
+    "prefer-template": "off",
+    "sort-imports": "off",
+    "sort-keys": "off",
+    "sort-vars": "off"
   }
 }
 
