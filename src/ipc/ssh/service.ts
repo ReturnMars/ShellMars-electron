@@ -72,6 +72,7 @@ export class SSHService {
   disconnect(sessionId: string): { success: boolean; error?: string } {
     try {
       sshSessionManager.disconnectSession(sessionId)
+      this.sessionBuffers.delete(sessionId)
       this.broadcastSessionsSnapshot()
       return { success: true }
     } catch (error: any) {

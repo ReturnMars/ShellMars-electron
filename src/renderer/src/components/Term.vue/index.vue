@@ -12,17 +12,20 @@ import '@xterm/xterm/css/xterm.css'
 const terminalRef = useTemplateRef('terminalRef')
 // 创建终端实例
 const fontSize = computed(() => {
-  console.log('🚀 ~ window.innerWidth:', window.innerWidth)
   if (window.innerWidth < 1920) {
-    return 14
+    return 16
   }
-  return 16
+  if (window.innerWidth < 2160) {
+    return 16
+  }
+  return 18
 })
 const terminal = new Terminal({
   cursorBlink: true,
-  fontFamily: '"Lato",Consolas, "Courier New", monospace',
+  fontFamily: '"Lato", Consolas, "Courier New", monospace',
   fontSize: fontSize.value,
   cursorStyle: 'underline',
+  lineHeight: 1.15,
   theme: {
     background: '#010101',
     foreground: '#D4D4D4',
@@ -31,18 +34,31 @@ const terminal = new Terminal({
 })
 
 const fitAddon = new FitAddon()
+const toFitAddon = () => {
+  fitAddon.fit()
+  const dims = fitAddon.proposeDimensions()
+  if (!dims || !linkStore.currentSessionItem?.id) return
+  window.ipc.ssh.resize({
+    sessionId: linkStore.currentSessionItem?.id,
+    cols: dims.cols,
+    rows: dims.rows
+  })
+}
 terminal.loadAddon(fitAddon)
 onMounted(() => {
   if (!terminalRef.value) return
   terminal.open(terminalRef.value)
-  fitAddon.fit()
   terminal.onData((data) => {
     console.log('🚀 ~ data:', data)
     if (!linkStore.currentSessionItem) return
     window.ipc.ssh.write({ sessionId: linkStore.currentSessionItem.id, data: data })
   })
+
+  window.addEventListener('resize', toFitAddon)
 })
+
 onUnmounted(() => {
+  window.removeEventListener('resize', toFitAddon)
   terminal.dispose()
 })
 const linkStore = useLinkStore()
@@ -58,16 +74,20 @@ linkStore.ensureTerminalEvents({
     terminal.write('\r\n[SESSION CLOSED]\r\n')
   }
 })
-
+const updateTerminal = async (sessionId?: string) => {
+  terminal.reset()
+  toFitAddon()
+  if (!sessionId) return
+  const result = await window.ipc.ssh.getSessionBuffer({ sessionId })
+  console.log('🚀 ~ result:', result)
+  if (result.success && result.data) {
+    terminal.write(result.data)
+  }
+}
 watch(
   () => linkStore.currentSessionItem?.id,
   async (sessionId) => {
-    terminal.reset()
-    if (!sessionId) return
-    const result = await window.ipc.ssh.getSessionBuffer({ sessionId })
-    if (result.success && result.data) {
-      terminal.write(result.data)
-    }
+    updateTerminal(sessionId)
   },
   { immediate: true }
 )
@@ -78,11 +98,13 @@ watch(
   height: 100%;
   background-color: #010101;
   position: relative;
+  overflow: auto;
+  padding: 12px;
   .terminal-content {
     width: 100%;
     height: 100%;
-    padding: 12px;
     box-sizing: border-box;
+    // overflow: auto;
   }
 }
 </style>

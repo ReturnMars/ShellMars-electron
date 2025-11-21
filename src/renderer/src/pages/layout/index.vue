@@ -22,15 +22,14 @@
     </n-layout-sider>
     <n-layout-content>
       <div class="w-full h-full flex flex-col">
-        <div class="flex-1 flex-shrink-0">
-          <!-- <router-view></router-view> -->
+        <div class="flex-1 flex-shrink-0 overflow-auto">
           <keep-alive>
             <Term />
           </keep-alive>
         </div>
-        <n-layout-footer class="flex-shrink-0">
-          <div class="px-4 py-1 text-right">Footer Footer Footer</div>
-        </n-layout-footer>
+        <!-- <n-layout-footer class="flex-shrink-0"> -->
+        <div class="px-4 py-1 text-right">Footer Footer Footer</div>
+        <!-- </n-layout-footer> -->
       </div>
     </n-layout-content>
   </n-layout>
