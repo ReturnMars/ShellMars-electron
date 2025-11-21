@@ -49,7 +49,6 @@ onMounted(() => {
   if (!terminalRef.value) return
   terminal.open(terminalRef.value)
   terminal.onData((data) => {
-    console.log('🚀 ~ data:', data)
     if (!linkStore.currentSessionItem) return
     window.ipc.ssh.write({ sessionId: linkStore.currentSessionItem.id, data: data })
   })
