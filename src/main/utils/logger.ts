@@ -38,11 +38,6 @@ function getCallerInfo(): { file: string; line: number } | null {
       let lineNumber = callSite.getLineNumber()
       const functionName = callSite.getFunctionName()
 
-      // 调试：打印调用栈信息
-      if (i === 2) {
-        console.log(`Debug: i=${i}, fileName=${fileName}, lineNumber=${lineNumber}, functionName=${functionName}`)
-      }
-
       if (!fileName || !lineNumber) continue
 
       // 跳过 node: 协议（Node.js 内部）
@@ -92,7 +87,6 @@ function getCallerInfo(): { file: string; line: number } | null {
       // 转换为相对路径
       try {
         const relativePath = relative(projectRoot, fileName).replace(/\\/g, '/')
-        console.log(`Final relativePath: ${relativePath}, lineNumber: ${lineNumber}`)
         // 确保是项目内的源文件，且不是 logger 文件
         if (
           !relativePath.startsWith('..') &&
@@ -100,7 +94,6 @@ function getCallerInfo(): { file: string; line: number } | null {
           !relativePath.includes('utils/logger')
         ) {
           callerInfo = { file: relativePath, line: lineNumber }
-          console.log(`Found callerInfo: ${callerInfo.file}:${callerInfo.line}`)
           break
         } else {
           console.log(`Skipped: relativePath=${relativePath}`)

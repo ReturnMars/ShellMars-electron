@@ -1,25 +1,83 @@
 import { ElectronAPI } from '@electron-toolkit/preload'
-import type { TestIpcEvent } from '../main/ipc/events'
-import type { TEST_IPC_EVENTS } from '../main/ipc/events'
+import { SessionItem } from '@renderer/store/modules/LinkStore/type'
 
-export interface IpcEvents {
-  TEST: typeof TEST_IPC_EVENTS
-}
-export interface IpcHandlers {
-  // 发送消息（不需要响应）
-  send: (channel: string, ...args: any[]) => void
-  // 调用并等待响应
-  invoke: (channel: string, ...args: any[]) => Promise<any>
-  // 监听消息
-  on: (channel: string, listener: (...args: any[]) => void) => () => void
-  // 移除所有监听
-  removeAllListeners: (channel: string) => void
+type IpcBridge = {
+  test: {
+    ping: (payload: string) => Promise<string>
+    pong: () => Promise<string>
+  }
+  ssh: {
+    testConnection: (payload: SessionItem) => Promise<string>
+    connect: (payload: { linkItem: SessionItem; sessionId?: string }) => Promise<{
+      success: boolean
+      sessionId: string
+      error?: string
+    }>
+    reconnect: (payload: { sessionId: string }) => Promise<{
+      success: boolean
+      sessionId: string
+      error?: string
+    }>
+    disconnect: (payload: { sessionId: string }) => Promise<{
+      success: boolean
+      error?: string
+    }>
+    deleteSession: (payload: { sessionId: string }) => Promise<{
+      success: boolean
+      error?: string
+    }>
+    write: (payload: { sessionId: string; data: string }) => Promise<{
+      success: boolean
+      error?: string
+    }>
+    resize: (payload: { sessionId: string; cols: number; rows: number }) => Promise<{
+      success: boolean
+      error?: string
+    }>
+
+    getListSessions: () => Promise<{
+      success: boolean
+      sessions: Array<{
+        sessionId: string
+        host: string
+        port: number
+        username: string
+        name?: string
+        isConnected: boolean
+        isConnecting: boolean
+      }>
+      error?: string
+    }>
+    getSessionBuffer: (payload: { sessionId: string }) => Promise<{
+      success: boolean
+      sessionId: string
+      data: string
+      error?: string
+    }>
+    onSessionsUpdate: (
+      callback: (payload: {
+        sessions: Array<{
+          sessionId: string
+          host: string
+          port: number
+          username: string
+          name?: string
+          isConnected: boolean
+          isConnecting: boolean
+        }>
+      }) => void
+    ) => void
+    onData: (callback: (data: { sessionId: string; data: string }) => void) => void
+    onError: (callback: (data: { sessionId: string; error: string }) => void) => void
+    onClose: (callback: (data: { sessionId: string }) => void) => void
+    removeAllListeners: (channel: string) => void
+  }
 }
 
 declare global {
   interface Window {
     electron: ElectronAPI
-    ipcEvents: IpcEvents
-    ipcHandlers: IpcHandlers
+    ipc: IpcBridge
+    versions: NodeJS.ProcessVersions
   }
 }

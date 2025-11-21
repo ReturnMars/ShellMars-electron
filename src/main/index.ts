@@ -3,9 +3,9 @@ import { BrowserWindow, app, shell } from 'electron'
 import { electronApp, is, optimizer } from '@electron-toolkit/utils'
 import { join } from 'path'
 import icon from '../../resources/icon.png?asset'
-import { registerIpcHandlers } from './ipc'
 // 导入 logger 以触发全局注册
 import './utils/logger'
+import { registerIpc } from '../ipc/index'
 
 const createWindow = (): void => {
   // Create the browser window.
@@ -45,10 +45,7 @@ app.whenReady().then(() => {
   app.on('browser-window-created', (_, window) => {
     optimizer.watchWindowShortcuts(window)
   })
-
-  // 注册所有 IPC 处理器
-  registerIpcHandlers()
-
+  registerIpc()
   createWindow()
 
   app.on('activate', function () {

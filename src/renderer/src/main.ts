@@ -1,6 +1,17 @@
-import './assets/main.css'
+import { createApp } from "vue";
+import { router } from "./router";
+import { pinia } from "./store";
 
-import { createApp } from 'vue'
-import App from './App.vue'
+import App from "./App.vue";
+// 通用字体
+import "vfonts/Lato.css";
+// 等宽字体
+import "vfonts/FiraCode.css";
+// 全局样式
+import "./assets/styles/index.scss";
+import "virtual:uno.css";
 
-createApp(App).mount('#app')
+const app = createApp(App);
+app.use(router);
+app.use(pinia);
+app.mount("#app");
