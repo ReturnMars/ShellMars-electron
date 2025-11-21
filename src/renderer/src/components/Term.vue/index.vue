@@ -78,7 +78,6 @@ const updateTerminal = async (sessionId?: string) => {
   toFitAddon()
   if (!sessionId) return
   const result = await window.ipc.ssh.getSessionBuffer({ sessionId })
-  console.log('🚀 ~ result:', result)
   if (result.success && result.data) {
     terminal.write(result.data)
   }

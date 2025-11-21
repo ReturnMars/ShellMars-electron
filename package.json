@@ -14,8 +14,11 @@
     "start": "electron-vite preview",
     "dev": "chcp 65001 && electron-vite dev",
     "build": "npm run typecheck && electron-vite build",
-    "postinstall": "electron-builder install-app-deps",
+    "postinstall": "node scripts/postinstall.js",
+    "prebuild:unpack": "node scripts/clean-dist.js",
     "build:unpack": "npm run build && electron-builder --dir",
+    "prebuild:win": "node scripts/clean-dist.js",
+    "clean:force": "powershell -ExecutionPolicy Bypass -File scripts/force-clean.ps1",
     "build:win": "npm run build && electron-builder --win",
     "build:mac": "npm run build && electron-builder --mac",
     "build:linux": "npm run build && electron-builder --linux"
@@ -62,5 +65,8 @@
   },
   "overrides": {
     "electron-builder-squirrel-windows": "^26.0.12"
+  },
+  "volta": {
+    "node": "25.2.1"
   }
 }
