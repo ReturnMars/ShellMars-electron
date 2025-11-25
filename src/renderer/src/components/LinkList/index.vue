@@ -31,6 +31,8 @@
 import { AddOutline } from '@vicons/ionicons5'
 import LinkItem from './components/LinkItem.vue'
 import { useLinkStore } from '../../store/modules/LinkStore'
+import LinkUpsertModal from '../LinkUpsertModal/index.vue'
+
 const linkStore = useLinkStore()
 const AddIcon = AddOutline
 linkStore.fetchSSHSessions()

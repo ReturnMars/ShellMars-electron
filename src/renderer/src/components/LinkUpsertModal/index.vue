@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="trigger-wrapper" @click="openModal">
+    <div class="trigger-wrapper flex items-center justify-center" @click="openModal">
       <slot>
         <n-button size="small">新增</n-button>
       </slot>
